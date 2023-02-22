@@ -5,6 +5,7 @@ let resultButton = document.querySelector('button');
 let image1 = document.querySelector('.product-image-1');
 let image2 = document.querySelector('.product-image-2');
 let image3 = document.querySelector('.product-image-3');
+let canvas = document.getElementById('myChart');
 
 const state = {
   products: [],
@@ -73,16 +74,57 @@ function handleProductClick(event){
   }
 }
 
-
 function renderResults() {
   // If the voting rounds are over, display the results
   let ul = document.querySelector('ul');
   ul.innerHTML = ''; // clear any previous results
-  for (let i = 0; i < state.products.length; i++) {
-    let li = document.createElement('li');
-    li.textContent = `${state.products[i].name} had ${state.products[i].votes} votes, and was shown ${state.products[i].views} times.`;
-    ul.appendChild(li);
-  }
+  // for (let i = 0; i < state.products.length; i++) {
+  //   let li = document.createElement('li');
+  //   li.textContent = `${state.products[i].name} had ${state.products[i].votes} votes, and was shown ${state.products[i].views} times.`;
+  //   ul.appendChild(li);
+  // }
+
+  // Create the chart data
+  let chartData = {
+    labels: state.products.map(product => product.name),
+    datasets: [
+      {
+        label: 'Times Clicked',
+        data: state.products.map(product => product.votes),
+        backgroundColor: 'black',
+        borderColor: 'black',
+        borderWidth: 1
+      },
+      {
+        label: 'Times Viewed',
+        data: state.products.map(product => product.views),
+        backgroundColor: 'blue',
+        borderColor: 'blue',
+        borderWidth: 1
+      }
+    ]
+  };
+
+  // Create the chart options
+  let chartOptions = {
+    scales: {
+      yAxes: [
+        {
+          ticks: {
+            beginAtZero: false
+          }
+        }
+      ]
+    }
+  };
+
+  new Chart(canvas, {
+    type: 'bar',
+    data: chartData,
+    options: chartOptions
+  });
+
+  canvas.style.display = 'block';
 }
 
 /* A for loop to loop through the array of products */
@@ -93,8 +135,12 @@ for (let item of candidates) {
   let path = (`img/${item}`);
   state.products.push(new Product(name, path));
 }
+
+
 console.log(state.products);
 
 displayProducts();
 
 productContainer.addEventListener('click', handleProductClick);
+
+resultButton.addEventListener('click', renderResults);
