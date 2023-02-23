@@ -190,10 +190,6 @@ window.addEventListener('load', () => {
   }
 });
 
-window.addEventListener('load', () => {
-  
-});
-
 displayProducts();
 
 productContainer.addEventListener('click', handleProductClick);
