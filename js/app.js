@@ -140,6 +140,32 @@ function loadFromLocalStorage() {
   }
 }
 
+let modeButtons = document.querySelectorAll('.mode');
+for (let i = 0; i < modeButtons.length; i++) {
+  modeButtons[i].addEventListener('click', handleModeChange);
+}
+
+function handleModeChange(event) {
+  if (event.target.value === 'dark') {
+    enterDarkMode();
+  } else {
+    enterLightMode();
+  }
+}
+
+function enterDarkMode() {
+  document.body.classList.add('dark');
+  document.body.classList.remove('light');
+  localStorage.setItem('mode', 'dark');
+}
+
+function enterLightMode() {
+  document.body.classList.add('light');
+  document.body.classList.remove('dark');
+  localStorage.setItem('mode', 'light');
+}
+
+
 /* A for loop to loop through the array of products */
 let candidates = ['bag.jpg','banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg','pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.jpg', 'tauntaun.jpg','unicorn.jpg', 'water-can.jpg','wine-glass.jpg'];
 
