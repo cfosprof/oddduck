@@ -148,8 +148,10 @@ for (let i = 0; i < modeButtons.length; i++) {
 function handleModeChange(event) {
   if (event.target.value === 'dark') {
     enterDarkMode();
+    localStorage.setItem('mode', 'dark');
   } else {
     enterLightMode();
+    localStorage.setItem('mode', 'light');
   }
 }
 
@@ -180,6 +182,15 @@ console.log(state.products);
 window.addEventListener('load', () => {
   loadFromLocalStorage();
   displayProducts();
+});
+
+window.addEventListener('load', () => {
+  const mode = localStorage.getItem('mode');
+  if (mode === 'dark') {
+    enterDarkMode();
+  } else if (mode === 'light') {
+    enterLightMode();
+  }
 });
 
 displayProducts();
