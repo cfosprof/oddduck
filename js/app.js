@@ -180,17 +180,18 @@ for (let item of candidates) {
 console.log(state.products);
 
 window.addEventListener('load', () => {
+  const mode = localStorage.getItem('mode');
   loadFromLocalStorage();
   displayProducts();
-});
-
-window.addEventListener('load', () => {
-  const mode = localStorage.getItem('mode');
   if (mode === 'dark') {
     enterDarkMode();
   } else if (mode === 'light') {
     enterLightMode();
   }
+});
+
+window.addEventListener('load', () => {
+  
 });
 
 displayProducts();
