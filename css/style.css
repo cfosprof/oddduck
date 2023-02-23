@@ -4,7 +4,6 @@
 
 body {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  background-color: cornsilk;
   color: saddlebrown;
 }
 
@@ -129,11 +128,11 @@ section.no-voting img:hover {
 }
 
 .dark {
-  color: white;
+  background-color: cornsilk;
   background-color: #555;
 }
 
 .light {
   color: black;
-  background-color: white;
+  background-color: cornsilk;
 }
