@@ -1,5 +1,9 @@
 'use strict';
 
+function saveToLocalStorage() {
+  localStorage.setItem('products', JSON.stringify(state.products));
+}
+
 let productContainer = document.querySelector('section');
 let resultButton = document.querySelector('button');
 let image1 = document.querySelector('.product-image-1');
@@ -68,8 +72,10 @@ function handleProductClick(event){
       resultButton.addEventListener('click', renderResults);
       resultButton.className = 'clicks-allowed';
       productContainer.className = 'no-voting';
+      saveToLocalStorage();
     } else {
       displayProducts();
+      saveToLocalStorage();
     }
   }
 }
@@ -127,6 +133,13 @@ function renderResults() {
   canvas.style.display = 'block';
 }
 
+function loadFromLocalStorage() {
+  const products = JSON.parse(localStorage.getItem('products'));
+  if (products) {
+    state.products = products.map(product => new Product(product.name, product.imagePath, product.views, product.votes));
+  }
+}
+
 /* A for loop to loop through the array of products */
 let candidates = ['bag.jpg','banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg','pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.jpg', 'tauntaun.jpg','unicorn.jpg', 'water-can.jpg','wine-glass.jpg'];
 
@@ -136,8 +149,12 @@ for (let item of candidates) {
   state.products.push(new Product(name, path));
 }
 
-
 console.log(state.products);
+
+window.addEventListener('load', () => {
+  loadFromLocalStorage();
+  displayProducts();
+});
 
 displayProducts();
 

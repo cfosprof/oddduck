@@ -127,3 +127,13 @@ section.no-voting img:hover {
 #results-container button:hover {
   background-color: rgb(211, 187, 175);
 }
+
+.dark {
+  color: white;
+  background-color: #555;
+}
+
+.light {
+  color: black;
+  background-color: white;
+}

@@ -11,6 +11,16 @@
 <body>
   <header>
     <h1>Odd Duck Product Co</h1>
+    <form>
+      <label for="dark">
+          <input type="radio" name="mode" id="darkButton" class="mode" value="dark"/>
+          <span>Dark Mode</span>
+      </label>
+      <label for="light">
+          <input type="radio" name="mode" id="lightButton" class="mode" value="light" checked/>
+          <span>Light Mode</span>
+      </label>
+    </form>
     <h2>Pick Our Next Product</h2>
   </header>
   <main>
@@ -24,6 +34,8 @@
     <ul></ul>
     <div>
       <canvas id="myChart"></canvas>
+      <p>Leave a comment</p>
+      <textarea id="commentBox" name="" id="" cols="30" rows="10"></textarea>  
     </div>
     
   </main>
