@@ -1,9 +1,5 @@
 'use strict';
 
-function saveToLocalStorage() {
-  localStorage.setItem('products', JSON.stringify(state.products));
-}
-
 let productContainer = document.querySelector('section');
 let resultButton = document.querySelector('button');
 let image1 = document.querySelector('.product-image-1');
@@ -16,31 +12,33 @@ const state = {
   maxClicksAllowed: 25
 };
 
-
+function saveToLocalStorage() {
+  localStorage.setItem('state', JSON.stringify(state));
+}
 // Constructor function for Product objects
 function Product(name, imagePath) {
   this.name = name;
   this.imagePath = imagePath;
   this.views = 0;
   this.votes = 0;
+  this.maxClicksAllowed = state.maxClicksAllowed;
 }
-
 
 // Display the products
 function displayProducts() {
   let product1, product2, product3;
-  //get random product
+  // get random product
   do {
     product1 = state.products[Math.floor(Math.random() * state.products.length)];
     product2 = state.products[Math.floor(Math.random() * state.products.length)];
     product3 = state.products[Math.floor(Math.random() * state.products.length)];
-  // make sure the products are not the same
+    // make sure the products are not the same
   } while (product1 === product2 || product1 === product3 || product2 === product3);
-  //increment the times shown
+  // increment the times shown
   product1.views++;
   product2.views++;
   product3.views++;
-  //display the products
+  // display the products
   image1.src = product1.imagePath;
   image2.src = product2.imagePath;
   image3.src = product3.imagePath;
@@ -54,7 +52,7 @@ function handleProductClick(event){
   } else {
     for (let i = 0; i < state.products.length; i++) {
       if (event.target.title === state.products[i].name) {
-        if (state.products[i].votes >= state.products[i].maxClicksAllowed) {
+        if (state.products[i].votes >= state.maxClicksAllowed) {
           alert('You have already clicked this product the maximum number of times!');
         } else {
           /* Incrementing the votes property of the product object. */
@@ -84,11 +82,12 @@ function renderResults() {
   // If the voting rounds are over, display the results
   let ul = document.querySelector('ul');
   ul.innerHTML = ''; // clear any previous results
-  // for (let i = 0; i < state.products.length; i++) {
-  //   let li = document.createElement('li');
-  //   li.textContent = `${state.products[i].name} had ${state.products[i].votes} votes, and was shown ${state.products[i].views} times.`;
-  //   ul.appendChild(li);
-  // }
+
+  for (let i = 0; i < state.products.length; i++) {
+    let li = document.createElement('li');
+    li.textContent = `${state.products[i].name} had ${state.products[i].votes} votes, and was shown ${state.products[i].views} times.`;
+    ul.appendChild(li);
+  }
 
   // Create the chart data
   let chartData = {
@@ -134,9 +133,10 @@ function renderResults() {
 }
 
 function loadFromLocalStorage() {
-  const products = JSON.parse(localStorage.getItem('products'));
-  if (products) {
-    state.products = products.map(product => new Product(product.name, product.imagePath, product.views, product.votes));
+  const savedState = JSON.parse(localStorage.getItem('state'));
+  if (savedState) {
+    state.products = savedState.products.map(product => new Product(product.name, product.imagePath));
+    state.maxClicksAllowed = savedState.maxClicksAllowed;
   }
 }
 
@@ -160,13 +160,11 @@ function enterDarkMode() {
   document.body.classList.remove('light');
   localStorage.setItem('mode', 'dark');
 }
-
 function enterLightMode() {
   document.body.classList.add('light');
   document.body.classList.remove('dark');
   localStorage.setItem('mode', 'light');
 }
-
 
 /* A for loop to loop through the array of products */
 let candidates = ['bag.jpg','banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg','pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.jpg', 'tauntaun.jpg','unicorn.jpg', 'water-can.jpg','wine-glass.jpg'];
