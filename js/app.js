@@ -12,17 +12,15 @@ const state = {
   maxClicksAllowed: 25
 };
 
-function saveToLocalStorage() {
-  localStorage.setItem('state', JSON.stringify(state));
-}
-// Constructor function for Product objects
 function Product(name, imagePath) {
   this.name = name;
   this.imagePath = imagePath;
   this.views = 0;
   this.votes = 0;
+  this.shown = 0;
   this.maxClicksAllowed = state.maxClicksAllowed;
 }
+
 
 // Display the products
 function displayProducts() {
@@ -45,6 +43,11 @@ function displayProducts() {
   image1.title = product1.name;
   image2.title = product2.name;
   image3.title = product3.name;
+
+  // Increment the shown count for each product
+  for (let i = 0; i < state.products.length; i++) {
+    state.products[i].shown++;
+  }
 }
 function handleProductClick(event){
   if (event.target === productContainer) {
@@ -70,10 +73,8 @@ function handleProductClick(event){
       resultButton.addEventListener('click', renderResults);
       resultButton.className = 'clicks-allowed';
       productContainer.className = 'no-voting';
-      saveToLocalStorage();
     } else {
       displayProducts();
-      saveToLocalStorage();
     }
   }
 }
@@ -82,12 +83,6 @@ function renderResults() {
   // If the voting rounds are over, display the results
   let ul = document.querySelector('ul');
   ul.innerHTML = ''; // clear any previous results
-
-  for (let i = 0; i < state.products.length; i++) {
-    let li = document.createElement('li');
-    li.textContent = `${state.products[i].name} had ${state.products[i].votes} votes, and was shown ${state.products[i].views} times.`;
-    ul.appendChild(li);
-  }
 
   // Create the chart data
   let chartData = {
@@ -102,7 +97,7 @@ function renderResults() {
       },
       {
         label: 'Times Viewed',
-        data: state.products.map(product => product.views),
+        data: state.products.map(product => product.views), // map views instead of shown
         backgroundColor: 'blue',
         borderColor: 'blue',
         borderWidth: 1
@@ -140,31 +135,6 @@ function loadFromLocalStorage() {
   }
 }
 
-let modeButtons = document.querySelectorAll('.mode');
-for (let i = 0; i < modeButtons.length; i++) {
-  modeButtons[i].addEventListener('click', handleModeChange);
-}
-
-function handleModeChange(event) {
-  if (event.target.value === 'dark') {
-    enterDarkMode();
-    localStorage.setItem('mode', 'dark');
-  } else {
-    enterLightMode();
-    localStorage.setItem('mode', 'light');
-  }
-}
-
-function enterDarkMode() {
-  document.body.classList.add('dark');
-  document.body.classList.remove('light');
-  localStorage.setItem('mode', 'dark');
-}
-function enterLightMode() {
-  document.body.classList.add('light');
-  document.body.classList.remove('dark');
-  localStorage.setItem('mode', 'light');
-}
 
 /* A for loop to loop through the array of products */
 let candidates = ['bag.jpg','banana.jpg', 'bathroom.jpg','boots.jpg','breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg', 'dog-duck.jpg', 'dragon.jpg', 'pen.jpg','pet-sweep.jpg', 'scissors.jpg', 'shark.jpg', 'sweep.jpg', 'tauntaun.jpg','unicorn.jpg', 'water-can.jpg','wine-glass.jpg'];
@@ -181,11 +151,6 @@ window.addEventListener('load', () => {
   const mode = localStorage.getItem('mode');
   loadFromLocalStorage();
   displayProducts();
-  if (mode === 'dark') {
-    enterDarkMode();
-  } else if (mode === 'light') {
-    enterLightMode();
-  }
 });
 
 displayProducts();
